@@ -20,17 +20,19 @@ function añadirProducto(id, producto, precio, cantidad) {
 }
 
 function eliminarProducto(idProducto) {
-    let bandera = true
-    while (bandera) {
-        for (let i = 0; i < stockProductos.length; i++) {
-            if (idProducto === stockProductos[i].id) {
-                stockProductos.splice(i, 1)
-                bandera = false
-            } else {
-                alert("Id incorrecto. Vuelva a intentar.")
-                return
-            }
+    let productoEliminado = true
+
+    for (let i = 0; i < stockProductos.length; i++) {
+        if (stockProductos[i].id === idProducto) {
+            stockProductos.splice(i, 1)
+            productoEliminado = false
+            alert("Producto eliminado correctamente.")
+            break
         }
+    }
+
+    if (productoEliminado) {
+        alert("Id incorrecto. Vuelva a intentar")
     }
 }
 
@@ -45,10 +47,10 @@ function mostrarProductos() {
 }
 
 function simularCompra(productos) {
-    let encontrado = false
+    let encontrado = true
     for (let i = 0; i < stockProductos.length; i++) {
         if (productos == stockProductos[i].producto) {
-            encontrado = true
+            encontrado = false
             const cantidadALlevar = Number(prompt("Cuanto quiere llevar?"))
             if (cantidadALlevar > stockProductos[i].cantidad) {
                 alert("Esta superando la cantidad disponible. Por favor vuelva a comprar.")
@@ -62,7 +64,7 @@ function simularCompra(productos) {
         }
     }
 
-    if (!encontrado) {
+    if (encontrado) {
         alert("Producto no disponible")
     }
 }
@@ -87,7 +89,7 @@ function core() {
                 bandera = confirm("Quiere seguir operando?")
                 break
             case 2:
-                const idProducto = Number(prompt("Ingrese el id del producto que desea eliminar"))
+                let idProducto = Number(prompt("Ingrese el id del producto que desea eliminar"))
                 eliminarProducto(idProducto)
                 bandera = confirm("Quiere seguir operando?")
                 break
