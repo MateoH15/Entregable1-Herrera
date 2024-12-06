@@ -15,15 +15,21 @@ let stockProductos = [{
     cantidad: 10
 }]
 
-function reponerProducto(id, producto, precio, cantidad) {
+function añadirProducto(id, producto, precio, cantidad) {
     stockProductos.push({ id, producto, precio, cantidad })
 }
 
 function eliminarProducto(idProducto) {
-
-    for (let i = 0; i < stockProductos.length; i++) {
-        if (idProducto === stockProductos[i].id) {
-            stockProductos.splice(i, 1)
+    let bandera = true
+    while (bandera) {
+        for (let i = 0; i < stockProductos.length; i++) {
+            if (idProducto === stockProductos[i].id) {
+                stockProductos.splice(i, 1)
+                bandera = false
+            } else {
+                alert("Id incorrecto. Vuelva a intentar.")
+                return
+            }
         }
     }
 }
@@ -39,22 +45,25 @@ function mostrarProductos() {
 }
 
 function simularCompra(productos) {
-    let bandera = true
-    while (bandera) {
-        for (let i = 0; i < stockProductos.length; i++) {
-            if (productos == stockProductos[i].producto) {
-                const cantidadALlevar = Number(prompt("Cuanto quiere llevar?"))
-                if (cantidadALlevar > stockProductos[i].cantidad) {
-                    alert("Esta superando la cantidad disponible. Por favor vuelva a comprar.")
-                } else {
-                    let total = 0
-                    total = stockProductos[i].precio * cantidadALlevar
-                    alert("El precio es de: " + total)
-                    stockProductos[i].cantidad -= cantidadALlevar
-                }
-                bandera = false
+    let encontrado = false
+    for (let i = 0; i < stockProductos.length; i++) {
+        if (productos == stockProductos[i].producto) {
+            encontrado = true
+            const cantidadALlevar = Number(prompt("Cuanto quiere llevar?"))
+            if (cantidadALlevar > stockProductos[i].cantidad) {
+                alert("Esta superando la cantidad disponible. Por favor vuelva a comprar.")
+            } else {
+                let total = 0
+                total = stockProductos[i].precio * cantidadALlevar
+                alert("El precio es de: " + total)
+                stockProductos[i].cantidad -= cantidadALlevar
             }
+            break
         }
+    }
+
+    if (!encontrado) {
+        alert("Producto no disponible")
     }
 }
 
@@ -64,7 +73,7 @@ function core() {
 
     while (bandera) {
 
-        const opciones = Number(prompt("Elija una opcion:\n \n1-Reponer un producto\n2-Eliminar un producto \n3-Ver productos \n4-Simular compra"))
+        const opciones = Number(prompt("Elija una opción:\n \n1-Añadir un producto\n2-Eliminar un producto \n3-Ver productos \n4-Simular compra"))
 
         switch (opciones) {
             case 0:
@@ -74,7 +83,7 @@ function core() {
                 const producto = prompt("Ingrese el nombre del producto: ")
                 const precio = Number(prompt("Ingrese el precio del producto: "))
                 const cantidad = Number(prompt("Ingrese la cantidad de productos: "))
-                reponerProducto(id, producto, precio, cantidad)
+                añadirProducto(id, producto, precio, cantidad)
                 bandera = confirm("Quiere seguir operando?")
                 break
             case 2:
@@ -92,7 +101,7 @@ function core() {
                 bandera = confirm("Quiere seguir operando?")
                 break
             default:
-                alert("Opcion no valida")
+                alert("Opción no valida")
                 break
         }
     }
